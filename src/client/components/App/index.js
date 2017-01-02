@@ -1,21 +1,44 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { todosSelector, tasksSelector } from '../../selectors/';
+import Menu from '../menu/';
+import Todos from '../todos/';
+import actionList from '../../actions/';
+import Header from '../header/';
 
-export const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-const Wrapper = styled.section`
-  padding: 4em;
-  background: papayawhip;
-`;
-
-const App = () => (
+export const AppComponent = ({ todos, tasks, options, alert, currentLoads, actions }) =>
   <Wrapper>
-    <Title>Hello World, this is my first react app!</Title>
-  </Wrapper>
-);
+    <Header alert={alert} currentLoads={currentLoads} />
+    <section>
+      <Menu options={options} actions={actions} />
+      <Todos todos={todos} tasks={tasks} actions={actions} />
+    </section>
+  </Wrapper>;
 
-export default App;
+AppComponent.propTypes = {
+  todos: PropTypes.array,
+  tasks: PropTypes.object,
+  options: PropTypes.object,
+  alert: PropTypes.object,
+  currentLoads: PropTypes.number,
+  actions: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  todos: todosSelector(state),
+  tasks: tasksSelector(state),
+  options: state.options,
+  alert: state.alert,
+  currentLoads: state.currentLoads,
+});
+
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actionList, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);

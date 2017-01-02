@@ -17,7 +17,7 @@ const webpackConfig = {
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '/build'),
-    publicPath: `/assets/`,
+    publicPath: '/assets/',
   },
   entry: {
     app: './src/client/index.js',
@@ -44,8 +44,8 @@ const webpackConfig = {
     }),
     ifDev(new webpack.HotModuleReplacementPlugin()),
   ]),
-  performance: { 
-    hints: false
+  performance: {
+    hints: false,
   },
   stats: {
     assets: true,
@@ -60,4 +60,3 @@ const webpackConfig = {
 };
 
 module.exports = webpackConfig;
-
