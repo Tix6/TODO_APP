@@ -19,21 +19,22 @@ class Task extends React.Component {
 
   handleInput = e => this.setState({ input: e.target.value });
 
-  handleSubmit = (task) => {
-    const { dispatch, actions: { updateTask } } = this.props;
+  handleSubmit = () => {
+    const { actions: { updateTask } } = this.props;
+    const { id } = this.props.task;
     const { input } = this.state;
-    dispatch(updateTask({ ...task, title: input }));
+    updateTask(id, input);
     this.setState({ updateMode: false });
   }
 
   render() {
     const { input, updateMode } = this.state;
-    const { task, dispatch, actions: { updateTask, delTask } } = this.props;
+    const { task, actions: { delTask, toggleTask } } = this.props;
     return (
       <Row>
         <Col>
           <Checkbox
-            onChange={() => dispatch(updateTask({ ...task, isChecked: !task.isChecked }))}
+            onChange={() => toggleTask(task.id)}
             checked={task.isChecked}
           />
           {updateMode ?
@@ -51,11 +52,11 @@ class Task extends React.Component {
         </Col>
         <Col>
           {updateMode ?
-            (<Button icon="check" onClick={() => this.handleSubmit(task)} size="small" />) :
+            (<Button icon="check" onClick={() => this.handleSubmit()} size="small" />) :
             (<Button icon="edit" onClick={() => this.setState({ updateMode: true })} size="small" />)
           }
           {updateMode ||
-            <Button onClick={() => dispatch(delTask(task.id))} icon="close" size="small" />
+            <Button onClick={() => delTask(task.id)} icon="close" size="small" />
           }
         </Col>
       </Row>
@@ -65,7 +66,6 @@ class Task extends React.Component {
 
 Task.propTypes = {
   task: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
   actions: PropTypes.object.isRequired,
 };
 

@@ -1,18 +1,17 @@
 import React, { PropTypes } from 'react';
 import { Switch } from 'antd';
 
-const FilterTodos = ({ dispatch, onSwitch, showCompletedTodos }) =>
+const FilterTodos = ({ onSwitch, showCompleted }) =>
   <Switch
     checkedChildren="Show All"
     unCheckedChildren="Hide Comp."
-    default={showCompletedTodos}
-    onChange={() => dispatch(onSwitch())}
+    default={showCompleted}
+    onChange={() => onSwitch()}
   />;
 
 FilterTodos.propTypes = {
-  dispatch: PropTypes.func,
-  onSwitch: PropTypes.func,
-  showCompletedTodos: PropTypes.bool,
+  onSwitch: PropTypes.func.isRequired,
+  showCompleted: PropTypes.bool.isRequired,
 };
 
 export default FilterTodos;

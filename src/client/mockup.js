@@ -45,8 +45,8 @@ const mockUp = {
       isChecked: true,
     },
   ],
-  mode: {
-    showCompletedTodos: true,
+  options: {
+    showCompleted: true,
     sortByAsc: true,
   },
 };

@@ -17,27 +17,24 @@ export const Filters = styled.div`
   align-self: flex-start;
 `;
 
-const Menu = ({ dispatch, actions, mode }) =>
+const Menu = ({ options, actions }) =>
   <Section>
-    <AddTodo dispatch={dispatch} onAdd={actions.addTodo} />
+    <AddTodo onAdd={actions.addTodo} />
     <Filters>
       <SortTodos
-        dispatch={dispatch}
         onSwitch={actions.sortByAsc}
-        sortByAsc={mode.sortByAsc}
+        sortByAsc={options.sortByAsc}
       />
       <FilterTodos
-        dispatch={dispatch}
         onSwitch={actions.showCompleted}
-        showCompletedTodos={mode.showCompletedTodos}
+        showCompleted={options.showCompleted}
       />
     </Filters>
   </Section>;
 
 Menu.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  options: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
-  mode: PropTypes.object.isRequired,
 };
 
 export default Menu;

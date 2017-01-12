@@ -18,10 +18,10 @@ class AddTask extends React.Component {
   handleInput = e => this.setState({ input: e.target.value });
 
   handleSubmit = (e) => {
-    const { dispatch, onAdd } = this.props;
+    const { onAdd } = this.props;
     const { input } = this.state;
     e.preventDefault();
-    dispatch(onAdd({ title: input, todoId: this.props.todoId }));
+    onAdd(input, this.props.todoId);
     this.setState({ input: '' });
   }
 
@@ -44,7 +44,6 @@ class AddTask extends React.Component {
 
 AddTask.propTypes = {
   todoId: PropTypes.number,
-  dispatch: PropTypes.func,
   onAdd: PropTypes.func,
 };
 

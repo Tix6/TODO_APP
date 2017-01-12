@@ -1,7 +1,11 @@
 import React, { PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Menu from '../menu/';
 import Todos from '../todos/';
+import actionList from '../../actions/';
+import { todosSelector, tasksSelector } from '../../selectors/';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,33 +22,30 @@ const Header = styled.header`
 export const Title = ({ title }) => <h1>{title}</h1>;
 Title.propTypes = { title: PropTypes.string.isRequired };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    const { store } = props;
-    /* https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md */
-    this.dispatcher = store.dispatch.bind(store);
-  }
+export const AppComponent = ({ todos, tasks, options, actions }) =>
+  <Wrapper>
+    <Header>
+      <Title title={'Todo List'} />
+    </Header>
+    <section>
+      <Menu options={options} actions={actions} />
+      <Todos todos={todos} tasks={tasks} actions={actions} />
+    </section>
+  </Wrapper>;
 
-  render() {
-    const { store: { state, state: { mode } }, actions } = this.props;
-    return (
-      <Wrapper>
-        <Header>
-          <Title title={'Todo List'} />
-        </Header>
-        <section>
-          <Menu dispatch={this.dispatcher} actions={actions} mode={mode} />
-          <Todos dispatch={this.dispatcher} actions={actions} {...state} />
-        </section>
-      </Wrapper>
-    );
-  }
-}
-
-App.propTypes = {
-  store: PropTypes.object,
+AppComponent.propTypes = {
+  todos: PropTypes.array,
+  tasks: PropTypes.object,
+  options: PropTypes.object,
   actions: PropTypes.object,
 };
 
-export default App;
+const mapStateToProps = state => ({
+  todos: todosSelector(state),
+  tasks: tasksSelector(state),
+  options: state.options,
+});
+
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actionList, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);

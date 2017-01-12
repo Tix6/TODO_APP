@@ -11,10 +11,10 @@ class AddTodo extends React.Component {
   handleInput = e => this.setState({ input: e.target.value });
 
   handleSubmit = (e) => {
-    const { dispatch, onAdd } = this.props;
+    const { onAdd } = this.props;
     const { input } = this.state;
     e.preventDefault();
-    dispatch(onAdd(input));
+    onAdd(input);
     this.setState({ input: '' });
   }
 
@@ -40,7 +40,6 @@ class AddTodo extends React.Component {
 }
 
 AddTodo.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   onAdd: PropTypes.func.isRequired,
 };
 

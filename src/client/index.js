@@ -1,14 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './components/App/';
-import { createStore, Provider } from './store';
+import { Provider } from 'react-redux';
+import configureStore from './store/';
 import initialState from './mockup';
-import actions from './actions';
+import App from './components/App/';
 
 console.log('mounting react app ...');  // eslint-disable-line no-console
-const store = createStore(initialState);
+const store = configureStore(initialState);
 const Root = (
-  <Provider store={store} actions={actions}>
+  <Provider store={store}>
     <App />
   </Provider>
 );
