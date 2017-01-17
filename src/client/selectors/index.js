@@ -17,16 +17,16 @@ import { createSelector } from 'reselect';
 const reduceTasksWithTodoId = tasks =>
   tasks.reduce((acc, task) => ({
     ...acc,
-    [task.todoId]: (acc[task.todoId]) ? [...acc[task.todoId], task] : [task],
+    [task.listId]: (acc[task.listId]) ? [...acc[task.listId], task] : [task],
   }),
   {});
 
 const filterCompletedTodos = (todos, tasks = []) =>
   todos.filter(todo =>
-    tasks[todo.id].some(task => task.isChecked === false) || tasks[todo.id].length === 0);
+    tasks[todo.id] === undefined || tasks[todo.id].some(task => task.isCompleted === false));
 
 const sortTodos = todos =>
-  todos.sort((t1, t2) => t1.title - t2.title);
+  todos.sort((t1, t2) => t1.label - t2.label);
 
 const filterTodos = (todos, tasks, options) => {
   let filtered = [...todos];
@@ -44,14 +44,14 @@ const getOptions = state => state.options;
 
 /* Selectors */
 
-const tasksSelector = createSelector(
+export const tasksSelector = createSelector(
   [getTasks],
   reduceTasksWithTodoId,
 );
 
-const todosSelector = createSelector(
+export const todosSelector = createSelector(
   [getTodos, tasksSelector, getOptions],
   filterTodos,
 );
 
-export { tasksSelector, todosSelector };
+export default { tasksSelector, todosSelector };

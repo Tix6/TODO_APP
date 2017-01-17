@@ -13,7 +13,7 @@ export const Col = styled.div``;
 
 class Task extends React.Component {
   state = {
-    input: this.props.task.title,
+    input: this.props.task.description,
     updateMode: false,
   }
 
@@ -21,9 +21,9 @@ class Task extends React.Component {
 
   handleSubmit = () => {
     const { actions: { updateTask } } = this.props;
-    const { id } = this.props.task;
+    const { task } = this.props;
     const { input } = this.state;
-    updateTask(id, input);
+    updateTask({ ...task, description: input });
     this.setState({ updateMode: false });
   }
 
@@ -34,19 +34,19 @@ class Task extends React.Component {
       <Row>
         <Col>
           <Checkbox
-            onChange={() => toggleTask(task.id)}
-            checked={task.isChecked}
+            onChange={() => toggleTask(task)}
+            checked={task.isCompleted}
           />
           {updateMode ?
             (<Input
-              placeholder={task.title}
+              placeholder={task.description}
               value={input}
               onChange={this.handleInput}
               size="small"
               style={{ width: '150px' }}
             />) :
-            (<p style={{ display: 'inline', textDecoration: task.isChecked ? 'line-through' : '' }}>
-              {task.title}
+            (<p style={{ display: 'inline', textDecoration: task.isCompleted ? 'line-through' : '' }}>
+              {task.description}
             </p>)
           }
         </Col>

@@ -2,31 +2,20 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { todosSelector, tasksSelector } from '../../selectors/';
 import Menu from '../menu/';
 import Todos from '../todos/';
 import actionList from '../../actions/';
-import { todosSelector, tasksSelector } from '../../selectors/';
+import Header from '../header/';
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const Header = styled.header`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-`;
-
-export const Title = ({ title }) => <h1>{title}</h1>;
-Title.propTypes = { title: PropTypes.string.isRequired };
-
-export const AppComponent = ({ todos, tasks, options, actions }) =>
+export const AppComponent = ({ todos, tasks, options, alert, currentLoads, actions }) =>
   <Wrapper>
-    <Header>
-      <Title title={'Todo List'} />
-    </Header>
+    <Header alert={alert} currentLoads={currentLoads} />
     <section>
       <Menu options={options} actions={actions} />
       <Todos todos={todos} tasks={tasks} actions={actions} />
@@ -37,6 +26,8 @@ AppComponent.propTypes = {
   todos: PropTypes.array,
   tasks: PropTypes.object,
   options: PropTypes.object,
+  alert: PropTypes.object,
+  currentLoads: PropTypes.number,
   actions: PropTypes.object,
 };
 
@@ -44,6 +35,8 @@ const mapStateToProps = state => ({
   todos: todosSelector(state),
   tasks: tasksSelector(state),
   options: state.options,
+  alert: state.alert,
+  currentLoads: state.currentLoads,
 });
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actionList, dispatch) });

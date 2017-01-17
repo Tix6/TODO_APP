@@ -11,7 +11,7 @@ const { expect } = chai;
 
 const props = {
   todo: { id: 1 },
-  tasks: [{ id: 1, todoId: 1 }, { id: 2, todoId: 1 }, { id: 3, todoId: 1 }],
+  tasks: [{ id: 1, listId: 1 }, { id: 2, listId: 1 }, { id: 3, listId: 1 }],
   actions: { delTodo: () => {} },
 };
 

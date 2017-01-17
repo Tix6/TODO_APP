@@ -12,7 +12,7 @@ export const Header = styled.header`
 
 export const TodoHeader = ({ todo, actions }) =>
   <Header>
-    <h3>{todo.title}</h3>
+    <h3>{todo.label}</h3>
     <Button onClick={() => actions.delTodo(todo.id)} type="ghost" shape="circle" icon={'close'} size="small" />
   </Header>
 ;

@@ -6,7 +6,7 @@ import Task, { Row, Col } from '../task';
 
 const { describe, it } = global;
 const { expect } = chai;
-const task = { id: 4, todoId: 1, title: 'task 4', isChecked: false };
+const task = { id: 4, listId: 1, description: 'task 4', isCompleted: false };
 
 describe('[UT] <Task />', () => {
   it('should render a <Row />', () => {

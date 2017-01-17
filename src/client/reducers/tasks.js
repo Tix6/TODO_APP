@@ -1,24 +1,21 @@
-import { ADD_TASK, DEL_TASK, UPDATE_TASK, TOGGLE_TASK } from '../actions/tasks';
-import { DEL_TODO } from '../actions/todos';
-
-let taskId = 5;
+import { TASK_ADDED, TASK_DELETED, TASK_UPDATED, TASK_TOGGLED, TASKS_LOADED } from '../actions/tasks';
 
 const tasks = (state = [], action = {}) => {
   const { type, payload } = action;
 
   switch (type) {
-    case ADD_TASK:
-      return state.concat({ id: (taskId += 1), ...payload });
-    case DEL_TASK:
+    case TASK_ADDED:
+      return [...state, payload];
+    case TASK_DELETED:
       return state.filter(task => task.id !== payload.id);
-    case UPDATE_TASK:
+    case TASK_UPDATED:
       return state.map(task =>
-        ((task.id === payload.id) ? { ...task, title: payload.title } : task));
-    case TOGGLE_TASK:
+        ((task.id === payload.id) ? payload : task));
+    case TASK_TOGGLED:
       return state.map(task =>
-        ((task.id === payload.id) ? { ...task, isChecked: !task.isChecked } : task));
-    case DEL_TODO:
-      return state.filter(task => task.todoId !== payload.id);
+        ((task.id === payload.id) ? payload : task));
+    case TASKS_LOADED:
+      return [...state, ...action.payload];
     default:
       return state;
   }

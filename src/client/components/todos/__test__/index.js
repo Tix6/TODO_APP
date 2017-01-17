@@ -10,15 +10,15 @@ const { expect } = chai;
 const todos = [
   {
     id: 1,
-    title: 'todo 1',
+    label: 'todo 1',
   },
   {
     id: 2,
-    title: 'todo 2',
+    label: 'todo 2',
   },
   {
     id: 3,
-    title: 'todo 3',
+    label: 'todo 3',
   },
 ];
 
