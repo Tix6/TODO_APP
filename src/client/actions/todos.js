@@ -1,6 +1,4 @@
 import requestJson from '../utils';
-import { tasksSelector } from '../selectors/';
-import { delTask } from './tasks';
 import { addLoading, delLoading } from './currentLoads';
 import { addAlert } from './alert';
 
@@ -12,19 +10,25 @@ const dispatchMany = (dispatch, actions = []) => {
   if (dispatch) actions.forEach(action => dispatch(action));
 };
 
+const errorHandler = (error, dispatch) => {
+  console.error(error.message);
+  dispatchMany(dispatch, [delLoading(), addAlert(error.message)]);
+  return error;
+};
+
 export const todoAdded = todo => ({
   type: TODO_ADDED,
   payload: todo,
 });
 
 export const addTodo = label => (dispatch) => {
-  const uri = 'api/todo/lists';
+  const uri = 'api/todos';
   const body = { todo: { label } };
   const options = { method: 'POST', body };
   dispatch(addLoading());
   requestJson(uri, options)
     .then(todo => dispatchMany(dispatch, [delLoading(), todoAdded(todo)]))
-    .catch(error => dispatchMany(dispatch, [delLoading(), addAlert(error.message)]));
+    .catch(error => errorHandler(error, dispatch));
 };
 
 export const todoDeleted = todo => ({
@@ -32,15 +36,13 @@ export const todoDeleted = todo => ({
   payload: todo,
 });
 
-export const delTodo = id => (dispatch, getState) => {
-  const uri = `api/todo/list/${id}`;
+export const delTodo = id => (dispatch) => {
+  const uri = `api/todos/${id}`;
   const options = { method: 'DELETE' };
-  const tasks = tasksSelector(getState())[id] || [];
-  const tasksPromises = tasks.map(task => delTask(task.id)(dispatch));
   dispatch(addLoading());
-  Promise.all([requestJson(uri, options), ...tasksPromises])
-    .then(values => dispatchMany(dispatch, [delLoading(), todoDeleted(values[0])]))
-    .catch(error => dispatchMany(dispatch, [delLoading(), addAlert(error.message)]));
+  requestJson(uri, options)
+    .then(todo => dispatchMany(dispatch, [delLoading(), todoDeleted(todo)]))
+    .catch(error => errorHandler(error, dispatch));
 };
 
 const todosLoaded = todos => ({
@@ -49,12 +51,12 @@ const todosLoaded = todos => ({
 });
 
 export const loadTodos = () => (dispatch) => {
-  const uri = 'api/todo/lists';
-  const options = { dispatch };
+  const uri = 'api/todos';
+  const options = { method: 'GET' };
   dispatch(addLoading());
   requestJson(uri, options)
     .then(todos => dispatchMany(dispatch, [delLoading(), todosLoaded(todos)]))
-    .catch(error => dispatchMany(dispatch, [delLoading(), addAlert(error.message)]));
+    .catch(error => errorHandler(error, dispatch));
 };
 
 export default { addTodo, delTodo };

@@ -5,19 +5,19 @@ const config = require('./config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
-const isProd = () => 'production' === nodeEnv;
-const isDev = () => 'development' === nodeEnv;
-const ifProd = (plugin) => isProd() ? plugin : null;
-const ifDev = (plugin) => isDev() ? plugin : null;
-const compact = R.filter((x) => !R.isNil(x));
+const isProd = () => nodeEnv === 'production';
+const isDev = () => nodeEnv === 'development';
+const ifProd = plugin => (isProd() ? plugin : null);
+const ifDev = plugin => (isDev() ? plugin : null);
+const compact = R.filter(x => !R.isNil(x));
 
 const webpackConfig = {
   devtool: config.devtool,
-  devServer: config.devServer || {},
+  devServer: config.server.front || {},
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '/build'),
-    publicPath: '/assets/',
+    publicPath: '/build/',
   },
   entry: {
     app: './src/client/index.js',
@@ -25,8 +25,8 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test:  /\.(js|jsx)$/,
-        loaders: [ 'babel-loader?cacheDirectory' ],
+        test: /\.(js|jsx)$/,
+        loaders: ['babel-loader?cacheDirectory'],
         exclude: /node_modules/,
       },
       {

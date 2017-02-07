@@ -21,7 +21,7 @@ describe('[UT] todos actions', () => {
 
   it('should load todos', (done) => {
     const response = [{ id: 1, title: 'test1' }, { id: 2, title: 'test2' }];
-    fetchMock.get(`${url}/api/todo/lists`, response);
+    fetchMock.get(`${url}/api/todos`, response);
     const actions = {
       [TODOS_LOADED]: (getState, action) => {
         const { payload } = action;
@@ -37,7 +37,7 @@ describe('[UT] todos actions', () => {
 
   it('should add todo', (done) => {
     const response = { id: 1, title: 'test' };
-    fetchMock.post(`${url}/api/todo/lists`, response);
+    fetchMock.post(`${url}/api/todos`, response);
     const actions = {
       [TODO_ADDED]: (getState, action) => {
         const { payload } = action;
@@ -54,7 +54,7 @@ describe('[UT] todos actions', () => {
   it('should del todo', (done) => {
     const response = { isDeleted: true, id: 1 };
     const state = { todos: [{ id: 1, title: 'test' }] };
-    fetchMock.delete(`${url}/api/todo/list/1`, response);
+    fetchMock.delete(`${url}/api/todos/1`, response);
     const actions = {
       [TODO_DELETED]: (getState, action) => {
         const { payload } = action;

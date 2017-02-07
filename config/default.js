@@ -1,3 +1,3 @@
 module.exports = {
-  api: 'http://rp3.redpelicans.com:4006',
+  api: 'http://0.0.0.0:3004',
 };

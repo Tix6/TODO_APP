@@ -29,12 +29,12 @@ class Task extends React.Component {
 
   render() {
     const { input, updateMode } = this.state;
-    const { task, actions: { delTask, toggleTask } } = this.props;
+    const { task, actions: { delTask, updateTask } } = this.props;
     return (
       <Row>
         <Col>
           <Checkbox
-            onChange={() => toggleTask(task)}
+            onChange={() => updateTask({ ...task, isCompleted: !task.isCompleted })}
             checked={task.isCompleted}
           />
           {updateMode ?

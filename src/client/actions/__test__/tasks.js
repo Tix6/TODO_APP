@@ -23,7 +23,7 @@ describe('[UT] tasks actions', () => {
 
   it('should load tasks', (done) => {
     const response = [{ id: 1, title: 'test1' }, { id: 2, title: 'test2' }];
-    fetchMock.get(`${url}/api/todo/tasks`, response);
+    fetchMock.get(`${url}/api/tasks`, response);
     const actions = {
       [TASKS_LOADED]: (getState, action) => {
         const { payload } = action;
@@ -39,7 +39,7 @@ describe('[UT] tasks actions', () => {
 
   it('should add task', (done) => {
     const response = { listId: 1, id: 1, isCompleted: false, description: 'test' };
-    fetchMock.post(`${url}/api/todo/tasks`, response);
+    fetchMock.post(`${url}/api/tasks`, response);
     const actions = {
       [TASK_ADDED]: (getState, action) => {
         const { payload } = action;
@@ -56,7 +56,7 @@ describe('[UT] tasks actions', () => {
   it('should del task', (done) => {
     const response = { isDeleted: true, id: 1 };
     const state = { tasks: [{ listId: 1, id: 1, isCompleted: false, description: 'test' }] };
-    fetchMock.delete(`${url}/api/todo/task/1`, response);
+    fetchMock.delete(`${url}/api/tasks/1`, response);
     const actions = {
       [TASK_DELETED]: (getState, action) => {
         const { payload } = action;
@@ -73,7 +73,7 @@ describe('[UT] tasks actions', () => {
   it('should update task', (done) => {
     const response = { listId: 1, id: 1, isCompleted: true, description: 'updated' };
     const state = { tasks: [{ listId: 1, id: 1, isCompleted: false, description: 'test' }] };
-    fetchMock.put(`${url}/api/todo/tasks`, response);
+    fetchMock.put(`${url}/api/tasks`, response);
     const actions = {
       [TASK_UPDATED]: (getState, action) => {
         const { payload } = action;

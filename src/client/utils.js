@@ -1,20 +1,25 @@
-import 'whatwg-fetch';
+import axios from 'axios';
 import { api } from '../../config/';
 
-const checkStatus = (result) => {
-  if (result.status !== 200) {
-    throw new Error(result.statusText);
-  }
-  return result;
+axios.defaults.baseURL = api;
+axios.defaults.headers = {
+  'Content-Type': 'application/json',
 };
 
-const requestJson = (uri, { method = 'GET', body } = {}) => {
-  const absoluteUri = `${api}/${uri}`;
-  const params = { headers: { 'Content-Type': 'application/json' }, method };
-  if (body) params.body = JSON.stringify(body);
-  return fetch(absoluteUri, params)
-          .then(checkStatus)
-          .then(result => result.json());
+const checkStatus = (response) => {
+  const { status, statusText } = response;
+  if (status !== 200) {
+    throw new Error(statusText);
+  }
+  return response;
 };
+
+const requestJson = (endpoint, { method = 'GET', body } = {}) =>
+  axios({
+    url: endpoint,
+    method,
+    data: body,
+    withCredentials: false,
+  }).then(checkStatus).then(response => response.data);
 
 export default requestJson;
