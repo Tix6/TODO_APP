@@ -2,10 +2,10 @@ import express from 'express';
 import initTodos from './todos';
 import initTasks from './tasks';
 
-const initApi = (models) => {
+const initApi = () => {
   const api = express.Router();
-  api.use('/todos', initTodos(models));
-  api.use('/tasks', initTasks(models));
+  api.use('/todos', initTodos());
+  api.use('/tasks', initTasks());
   return api;
 };
 

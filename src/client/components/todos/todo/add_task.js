@@ -43,7 +43,7 @@ class AddTask extends React.Component {
 }
 
 AddTask.propTypes = {
-  todoId: PropTypes.number,
+  todoId: PropTypes.string,
   onAdd: PropTypes.func,
 };
 

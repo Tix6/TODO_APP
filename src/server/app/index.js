@@ -9,12 +9,12 @@ import compression from 'compression';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import initApi from './api/';
-import Connector from './connector';
+// import Connector from './connector';
 import middlewares from '../app/middlewares/';
 
 const getUrl = server => `http://${server.address().address}:${server.address().port}`;
 
-const initApp = ({ config, models } = {}) => {
+const initApp = ({ config } = {}) => {
   const { publicPath, buildPath, server: { back: { host, port } } } = config;
   const app = express();
 
@@ -31,7 +31,7 @@ const initApp = ({ config, models } = {}) => {
   const httpServer = http.createServer(app);
   const io = socketIO(httpServer);
 
-  app.connector = new Connector(io, models);
+  // app.connector = new Connector(io);
 
   const promise = new Promise((resolve) => {
     app.disable('etag')
@@ -46,7 +46,7 @@ const initApp = ({ config, models } = {}) => {
       .use('/ping', (req, res) => res.json({ ping: 'pong' }))
       .use('/sessions', (req, res) => res.json(app.connector.getSessions()))
       .use(logger('dev'))
-      .use('/api', initApi(models))
+      .use('/api', initApi())
       .use(middlewares.errors)
       .use((req, res) => res.redirect('/public/index.html'));
 

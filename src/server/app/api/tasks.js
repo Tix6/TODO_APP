@@ -1,46 +1,32 @@
 import express from 'express';
+import Task from '../../db/models/task';
 
-const loadTasks = model => (req, res) => {
-  res.json(model.load());
+const loadTasks = (req, res, next) => {
+  Task.load().then(t => res.json(t)).catch(next);
 };
 
-const addTask = (model, todosModel) => (req, res, next) => {
-  try {
-    const { task } = req.body;
-    if (todosModel.isMatchingTodo(Number(task.listId))) {
-      res.json(model.add(task));
-    } else {
-      throw new Error(`Unknown todo id ${task.listId}`);
-    }
-  } catch (e) {
-    next(e);
-  }
+/* TODO: check matching with todo */
+const addTask = (req, res, next) => {
+  const { task } = req.body;
+  Task.add(task).then(t => res.json(t)).catch(next);
 };
 
-const updateTask = model => (req, res, next) => {
-  try {
-    const { task } = req.body;
-    res.json(model.update(task));
-  } catch (e) {
-    next(e);
-  }
+const deleteTask = (req, res, next) => {
+  const { id } = req.params;
+  Task.del(id).then(i => res.json(i)).catch(next);
 };
 
-const deleteTask = model => (req, res, next) => {
-  try {
-    const id = Number(req.params.id);
-    res.json(model.del(id));
-  } catch (e) {
-    next(e);
-  }
+const updateTask = (req, res, next) => {
+  const { task } = req.body;
+  Task.update(task).then(u => res.json(u)).catch(next);
 };
 
-const initTasks = (model) => {
+const initTasks = () => {
   const router = express.Router();
-  router.get('/', loadTasks(model.tasks));
-  router.post('/', addTask(model.tasks, model.todos));
-  router.put('/', updateTask(model.tasks));
-  router.delete('/:id', deleteTask(model.tasks));
+  router.get('/', loadTasks);
+  router.post('/', addTask);
+  router.put('/', updateTask);
+  router.delete('/:id', deleteTask);
   return router;
 };
 

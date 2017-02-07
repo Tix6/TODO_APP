@@ -19,4 +19,5 @@ module.exports = {
       port: 3004,
     },
   },
+  mongodbURI: 'mongodb://localhost/devDB',
 };

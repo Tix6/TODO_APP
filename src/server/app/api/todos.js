@@ -1,33 +1,26 @@
 import express from 'express';
+import Todo from '../../db/models/todo';
 
-const loadTodos = model => (req, res) => {
-  res.json(model.load());
+const loadTodos = (req, res, next) => {
+  Todo.load().then(t => res.json(t)).catch(next);
 };
 
-const addTodo = model => (req, res, next) => {
-  try {
-    const { todo } = req.body;
-    res.json(model.add(todo));
-  } catch (e) {
-    next(e);
-  }
+const addTodo = (req, res, next) => {
+  const { todo } = req.body;
+  Todo.add(todo).then(t => res.json(t)).catch(next);
 };
 
-const deleteTodo = (model, tasksModel) => (req, res, next) => {
-  try {
-    const id = Number(req.params.id);
-    tasksModel.delByTodoId(id);
-    res.json(model.del(id));
-  } catch (e) {
-    next(e);
-  }
+/* TODO: deletes tasks too */
+const deleteTodo = (req, res, next) => {
+  const { id } = req.params;
+  Todo.del(id).then(i => res.json(i)).catch(next);
 };
 
-const initTodos = (model) => {
+const initTodos = () => {
   const router = express.Router();
-  router.get('/', loadTodos(model.todos));
-  router.post('/', addTodo(model.todos));
-  router.delete('/:id', deleteTodo(model.todos, model.tasks));
+  router.get('/', loadTodos);
+  router.post('/', addTodo);
+  router.delete('/:id', deleteTodo);
   return router;
 };
 
