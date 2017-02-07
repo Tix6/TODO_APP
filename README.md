@@ -6,6 +6,8 @@
 - Express.js
 - React.js
 - Redux.js
+- Socket.io
+- MongoDB
 
 ## Commands
 
