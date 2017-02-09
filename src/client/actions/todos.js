@@ -1,3 +1,4 @@
+import R from 'ramda';
 import requestJson from '../utils';
 import { addLoading, delLoading } from './currentLoads';
 import { addAlert } from './alert';
@@ -50,8 +51,9 @@ const todosLoaded = todos => ({
   payload: todos,
 });
 
-export const loadTodos = () => (dispatch) => {
-  const uri = 'api/todos';
+export const loadTodos = filter => (dispatch) => {
+  let uri = 'api/todos';
+  if (filter) uri = R.compose(R.concat(`${uri}?filter=`), R.replace(/\s+/g, '+'))(filter);
   const options = { method: 'GET' };
   dispatch(addLoading());
   requestJson(uri, options)
@@ -59,4 +61,4 @@ export const loadTodos = () => (dispatch) => {
     .catch(error => errorHandler(error, dispatch));
 };
 
-export default { addTodo, delTodo };
+export default { addTodo, delTodo, loadTodos };

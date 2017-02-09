@@ -9,7 +9,7 @@ const todos = (state = [], action = {}) => {
     case TODO_DELETED:
       return state.filter(todo => todo.id !== payload.id);
     case TODOS_LOADED:
-      return [...state, ...payload];
+      return payload;
     default:
       return state;
   }

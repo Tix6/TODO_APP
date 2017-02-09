@@ -2,7 +2,7 @@ import express from 'express';
 import Task from '../../db/models/task';
 
 const loadTasks = (req, res, next) => {
-  Task.findAll()
+  Task.find()
     .then(tasks => res.json(tasks))
     .catch(next);
 };

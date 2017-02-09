@@ -2,7 +2,6 @@ import { TASK_ADDED, TASK_DELETED, TASK_UPDATED, TASKS_LOADED } from '../actions
 
 const tasks = (state = [], action = {}) => {
   const { type, payload } = action;
-
   switch (type) {
     case TASK_ADDED:
       return [...state, payload];

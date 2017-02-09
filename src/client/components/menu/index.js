@@ -19,7 +19,10 @@ export const Filters = styled.div`
 
 const Menu = ({ options, actions }) =>
   <Section>
-    <AddTodo onAdd={actions.addTodo} />
+    <AddTodo
+      onAdd={actions.addTodo}
+      onSearch={actions.loadTodos}
+    />
     <Filters>
       <SortTodos
         onSwitch={actions.sortByAsc}

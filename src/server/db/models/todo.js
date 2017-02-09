@@ -3,7 +3,7 @@ import R from 'ramda';
 import Task from './task';
 
 const todoSchema = new Schema({
-  label: String,
+  label: { type: String, required: true },
 });
 
 todoSchema.set('toJSON', {
@@ -12,7 +12,25 @@ todoSchema.set('toJSON', {
 
 const Todo = mongoose.model('Todo', todoSchema);
 
-const findAll = () => Todo.find().exec();
+const filter = (words) => {
+  const pattern = R.compose(R.join(''), R.map(word => `(?=.*${word})`))(words);
+  const regex = new RegExp(`${pattern}.*`, 'i');
+
+  const todosFilteredFromTodos = Todo.find({ label: regex }).exec();
+  const todosFilteredFromTasks = Task.populateTodos({ description: regex })
+    .then(R.pluck('listId'));
+
+  return Promise.all([todosFilteredFromTodos, todosFilteredFromTasks])
+    .then(([fromTodos, fromTasks]) => R.union(fromTodos, fromTasks));
+};
+
+const find = (queryString) => {
+  if (queryString) {
+    const words = R.compose(R.reject(R.isEmpty), R.split(' '))(queryString);
+    return filter(words);
+  }
+  return Todo.find().exec();
+};
 
 const findOne = id =>
   Todo.findById(id).exec().then((todo) => {
@@ -31,9 +49,9 @@ const del = (id) => {
 
   return Promise.all([todoPromise, tasksPromise])
     .then(([todoDeleted, tasksDeleted]) => {
-      console.log(`${tasksDeleted.length} tasks deleted with todo ${todoDeleted._id}`);
+      console.log(`${tasksDeleted} tasks deleted.`);
       return { id: todoDeleted._id };
     });
 };
 
-export default { findAll, findOne, add, del };
+export default { find, findOne, add, del };

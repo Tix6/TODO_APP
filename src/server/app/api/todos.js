@@ -2,7 +2,8 @@ import express from 'express';
 import Todo from '../../db/models/todo';
 
 const loadTodos = (req, res, next) => {
-  Todo.findAll()
+  const { filter } = req.query;
+  Todo.find(filter)
     .then(todos => res.json(todos))
     .catch(next);
 };
