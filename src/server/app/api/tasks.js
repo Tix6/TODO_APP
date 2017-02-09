@@ -2,10 +2,11 @@ import express from 'express';
 import Task from '../../db/models/task';
 
 const loadTasks = (req, res, next) => {
-  Task.load().then(t => res.json(t)).catch(next);
+  Task.findAll()
+    .then(tasks => res.json(tasks))
+    .catch(next);
 };
 
-/* TODO: check matching with todo */
 const addTask = (req, res, next) => {
   const { task } = req.body;
   Task.add(task).then(t => res.json(t)).catch(next);

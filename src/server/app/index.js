@@ -14,7 +14,7 @@ import middlewares from '../app/middlewares/';
 
 const getUrl = server => `http://${server.address().address}:${server.address().port}`;
 
-const initApp = ({ config } = {}) => {
+const initApp = (config = {}) => {
   const { publicPath, buildPath, server: { back: { host, port } } } = config;
   const app = express();
 

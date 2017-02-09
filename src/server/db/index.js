@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
-import { mongodbURI } from '../../../config';
 
-mongoose.connect(mongodbURI);
-mongoose.Promise = global.Promise;
-const db = mongoose.connection;
+const dbPromise = uri => (new Promise((resolve) => {
+  mongoose.Promise = global.Promise;
+  mongoose.connect(uri);
+  resolve(mongoose.connection);
+}));
 
-export default db;
+const initDb = ({ mongodbURI }) => dbPromise(mongodbURI);
+
+export default initDb;
